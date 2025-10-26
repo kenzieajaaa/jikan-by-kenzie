@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>にほんごのじかん — Menu</title>
+  <style>
+    :root{
+      --bg: #eaf7ef;
+      --card: #ffffff;
+      --accent: #2e7d32;
+      --accent-2: #66bb6a;
+      --muted: #4b6b50;
+      --glass: rgba(255,255,255,0.9);
+      --shadow: 0 8px 22px rgba(46,125,50,0.08);
+      --radius:14px;
+      font-family: "Poppins", "Noto Sans JP", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#f6fff6);color:#123;}
+    .container{max-width:920px;margin:28px auto;padding:18px}
+    /* Card */
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
+    header{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:18px}
+    h1{margin:0;color:var(--accent);font-size:1.9rem}
+    p.subtitle{margin:0;color:var(--muted)}
+    /* Menu buttons vertical */
+    .menu{display:flex;flex-direction:column;gap:14px;align-items:center;margin-top:18px}
+    .big-btn{width:80%;max-width:420px;padding:14px 18px;border-radius:12px;border:none;background:var(--accent-2);color:white;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,0.06)}
+    .big-btn.ghost{background:transparent;border:2px solid #dff2df;color:var(--accent)}
+    /* pages */
+    .page{display:none;margin-top:18px}
+    .page.active{display:block}
+    h2{color:var(--accent);margin:0 0 8px 0}
+    .muted{color:var(--muted)}
+    table{width:100%;border-collapse:collapse;margin-top:12px}
+    th,td{border:1px solid #e7f3e7;padding:8px;text-align:center;font-size:0.95rem}
+    th{background:#f0fff0;color:var(--accent)}
+    /* quiz */
+    .quiz-start{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    input[type="text"]{padding:10px;border-radius:10px;border:1px solid #dfefe0;width:260px}
+    .note{font-size:0.92rem;color:var(--muted)}
+    .quiz-card{background:#fbfff9;border-radius:12px;padding:14px;border:1px solid #e6f6e6;margin-top:12px}
+    .q-number{font-weight:700;color:var(--accent)}
+    .q-text{font-size:1.05rem;margin-top:8px}
+    .options{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+    .opt-btn{padding:10px;border-radius:10px;border:1px solid #e6efe6;background:#fff;cursor:pointer;text-align:left}
+    .opt-btn.selected{background:#e7f6ea;border-color:var(--accent-2)}
+    .controls{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+    .btn{padding:10px 14px;border-radius:10px;border:none;background:var(--accent-2);color:white;font-weight:700;cursor:pointer}
+    .btn.ghost{background:transparent;color:var(--accent);border:1px solid #dff2df}
+    .result-box{background:#fbfff9;border:1px dashed #dff2df;padding:12px;border-radius:10px;margin-top:12px}
+    .review-item{padding:10px;border-bottom:1px solid #eef7ee}
+    .correct{color:green;font-weight:700}
+    .wrong{color:#c62828;font-weight:700}
+    .small{font-size:0.88rem;color:var(--muted)}
+    footer{text-align:center;color:var(--muted);margin-top:18px;font-size:0.9rem}
+    @media (max-width:720px){ .big-btn{width:92%} input[type="text"]{width:100%} }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- MENU -->
+    <div id="menuPage" class="card page active">
+      <header>
+        <h1>にほんごのじかん</h1>
+        <p class="subtitle">Ayo belajar menyebutkan jam dalam Bahasa Jepang (じかん)</p>
+      </header>
+
+      <div class="menu">
+        <button class="big-btn" data-nav="about">Tentang</button>
+        <button class="big-btn" data-nav="materi">Materi</button>
+        <button class="big-btn" data-nav="latihan">Latihan Soal</button>
+      </div>
+    </div>
+
+    <!-- ABOUT PAGE -->
+    <div id="aboutPage" class="card page">
+      <h2>📖 Tentang</h2>
+      <p class="muted">Media pembelajaran ini dibuat untuk membantu siswa SMA memahami cara menyebutkan waktu (じ) dan menit (ふん／ぷん) dalam bahasa Jepang secara interaktif. Setelah mempelajari materi, siswa dapat mencoba latihan pilihan ganda untuk menguji pemahaman.</p>
+
+      <div style="margin-top:14px; text-align:right">
+        <button class="btn ghost" data-nav="menu">🔙 Kembali ke Menu</button>
+      </div>
+    </div>
+
+    <!-- MATERI PAGE -->
+    <div id="materiPage" class="card page">
+      <h2>📚 Materi: Menyatakan Jam (じかん)</h2>
+
+      <h3>1️⃣ Kosakata Dasar（たんご）</h3>
+      <table>
+        <tr><th>Indonesia</th><th>ひらがな</th><th>Romaji</th><th>Arti</th></tr>
+        <tr><td>Jam (waktu)</td><td>じ</td><td>ji</td><td>Penanda jam</td></tr>
+        <tr><td>Menit</td><td>ふん／ぷん</td><td>fun / pun</td><td>Penanda menit</td></tr>
+        <tr><td>30 Menit</td><td>はん</td><td>han</td><td>30 Menit</td></tr>
+        <tr><td>Sekarang</td><td>いま</td><td>ima</td><td>Sekarang</td></tr>
+        <tr><td>Pagi</td><td>ごぜん</td><td>gozen</td><td>AM</td></tr>
+        <tr><td>Sore / malam</td><td>ごご</td><td>gogo</td><td>PM</td></tr>
+      </table>
+
+      <h3 style="margin-top:12px">2️⃣ Menyebutkan Jam</h3>
+      <p class="small"><strong>Struktur:</strong> [angka] + じ</p>
+      <table>
+        <tr><th>Angka</th><th>Hiragana</th><th>Romaji</th><th>Arti</th></tr>
+        <tr><td>1じ</td><td>いちじ</td><td>ichiji</td><td>jam 1</td></tr>
+        <tr><td>2じ</td><td>にじ</td><td>niji</td><td>jam 2</td></tr>
+        <tr><td>3じ</td><td>さんじ</td><td>sanji</td><td>jam 3</td></tr>
+        <tr><td>4じ</td><td>よじ</td><td>yoji</td><td>jam 4</td></tr>
+        <tr><td>5じ</td><td>ごじ</td><td>goji</td><td>jam 5</td></tr>
+        <tr><td>6じ</td><td>ろくじ</td><td>rokuji</td><td>jam 6</td></tr>
+        <tr><td>7じ</td><td>しちじ</td><td>shichiji</td><td>jam 7</td></tr>
+        <tr><td>8じ</td><td>はちじ</td><td>hachiji</td><td>jam 8</td></tr>
+        <tr><td>9じ</td><td>くじ</td><td>kuji</td><td>jam 9</td></tr>
+        <tr><td>10じ</td><td>じゅうじ</td><td>juuji</td><td>jam 10</td></tr>
+        <tr><td>11じ</td><td>じゅういちじ</td><td>juuichiji</td><td>jam 11</td></tr>
+        <tr><td>12じ</td><td>じゅうにじ</td><td>juuniji</td><td>jam 12</td></tr>
+      </table>
+
+      <h3 style="margin-top:12px">3️⃣ Menit</h3>
+      <p class="small"><strong>Struktur:</strong> [angka] + ふん／ぷん</p>
+      <table>
+        <tr><th>Angka</th><th>Hiragana</th><th>Romaji</th><th>Arti</th></tr>
+        <tr><td>1ぷん</td><td>いっぷん</td><td>ippun</td><td>1 menit</td></tr>
+        <tr><td>2ふん</td><td>にふん</td><td>nifun</td><td>2 menit</td></tr>
+        <tr><td>3ぷん</td><td>さんぷん</td><td>sanpun</td><td>3 menit</td></tr>
+        <tr><td>4ぷん</td><td>よんぷん</td><td>yonpun</td><td>4 menit</td></tr>
+        <tr><td>5ふん</td><td>ごふん</td><td>gofun</td><td>5 menit</td></tr>
+        <tr><td>6ぷん</td><td>ろっぷん</td><td>roppun</td><td>6 menit</td></tr>
+        <tr><td>7ふん</td><td>ななふん</td><td>nanafun</td><td>7 menit</td></tr>
+        <tr><td>8ぷん</td><td>はっぷん</td><td>happun</td><td>8 menit</td></tr>
+        <tr><td>9ふん</td><td>きゅうふん</td><td>kyuufun</td><td>9 menit</td></tr>
+        <tr><td>10ぷん</td><td>じゅっぷん／じっぷん</td><td>juppun / jippun</td><td>10 menit</td></tr>
+        <tr><td>30ぷん</td><td>さんじゅっぷん</td><td>sanjuppun</td><td>30 menit</td></tr>
+      </table>
+
+      <div style="margin-top:14px; text-align:right">
+        <button class="btn ghost" data-nav="menu">🔙 Kembali ke Menu</button>
+      </div>
+    </div>
+
+    <!-- LATIHAN PAGE -->
+    <div id="latihanPage" class="card page">
+      <h2>🎯 Latihan Soal — じかんのクイズ</h2>
+
+      <!-- start box -->
+      <div id="startBox" class="quiz-start">
+        <div style="flex:1">
+          <p class="note">Masukkan nama kamu (romaji):</p>
+          <input type="text" id="playerName" placeholder="contoh: rizky" maxlength="30">
+        </div>
+        <div style="display:flex;align-items:center">
+          <button class="btn" id="startBtn">▶ はじめる (Mulai)</button>
+        </div>
+      </div>
+
+      <!-- quiz card -->
+      <div id="quizBox" class="quiz-card" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="q-number" id="qNumber">Soal 1 / 5</div>
+            <div class="q-text" id="qText">--</div>
+            <div class="small">Pilih jawaban lalu tekan 「つぎへ」</div>
+          </div>
+          <div style="text-align:right">
+            <div class="small">Nama: <span id="playerLabel"></span></div>
+            <div class="small" style="margin-top:6px">Soal: <span id="progress">1 / 5</span></div>
+          </div>
+        </div>
+
+        <div class="options" id="optionsList"></div>
+
+        <div class="controls">
+          <button class="btn ghost" id="prevBtn" style="display:none">◀ もどる (Sebelumnya)</button>
+          <button class="btn" id="nextBtn">つぎへ (Berikutnya)</button>
+        </div>
+      </div>
+
+      <!-- result -->
+      <div id="resultBox" class="quiz-card" style="display:none">
+        <h3>スコア (Hasil)</h3>
+        <div class="result-box">
+          <div id="scoreText" style="font-weight:800; font-size:1.05rem">Skor: 0 / 5</div>
+          <div class="small" style="margin-top:6px">おつかれさま！ (Otsukaresama!) — Lihat rekap jawaban di bawah.</div>
+        </div>
+
+        <div id="reviewList" class="review" style="margin-top:10px"></div>
+
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+          <button class="btn ghost" id="retryBtn">🔁 もういちど (Ulangi)</button>
+          <button class="btn" id="backMenuBtn">🏠 メニュー (Kembali ke Menu)</button>
+        </div>
+      </div>
+
+      <div style="margin-top:12px; text-align:right">
+        <button class="btn ghost" data-nav="menu">🔙 Kembali ke Menu</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* ------------------- NAVIGATION ------------------- */
+    function showPage(id){
+      document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+      const el = document.getElementById(id + 'Page');
+      if(el) el.classList.add('active');
+      // scroll to top of container
+      window.scrollTo({top:0,behavior:'smooth'});
+      // hide quiz UI if switching away
+      if(id !== 'latihan') hideQuizAll();
+    }
+
+    // menu buttons
+    document.querySelectorAll('[data-nav]').forEach(btn=>{
+      btn.addEventListener('click', ()=> {
+        const target = btn.getAttribute('data-nav');
+        showPage(target);
+      });
+    });
+
+    // also allow nav from ghost buttons
+    document.querySelectorAll('[data-nav="menu"]').forEach(b=>{
+      b.addEventListener('click', ()=> showPage('menu'));
+    });
+
+    /* ------------------- QUIZ DATA ------------------- */
+    const questions = [
+      {
+        prompt: '“Jam empat” dalam bahasa Jepang adalah…',
+        options: [
+          {h:'よじ', r:'yoji', t:'よじ (yoji)'},
+          {h:'しちじ', r:'shichiji', t:'しちじ (shichiji)'},
+          {h:'はちじ', r:'hachiji', t:'はちじ (hachiji)'},
+          {h:'じゅうじ', r:'juuji', t:'じゅうじ (juuji)'}
+        ],
+        answer: 0
+      },
+      {
+        prompt: '“Jam tiga” dalam bahasa Jepang adalah…',
+        options: [
+          {h:'ろくじ', r:'rokuji', t:'ろくじ (rokuji)'},
+          {h:'さんじ', r:'sanji', t:'さんじ (sanji)'},
+          {h:'にじ', r:'niji', t:'にじ (niji)'},
+          {h:'ごじ', r:'goji', t:'ごじ (goji)'}
+        ],
+        answer: 1
+      },
+      {
+        prompt: '“Jam satu setengah / 1:30” dalam bahasa Jepang adalah…',
+        options: [
+          {h:'いちじはん', r:'ichiji han', t:'いちじはん (ichiji han)'},
+          {h:'にじはん', r:'niji han', t:'にじはん (niji han)'},
+          {h:'いちじ', r:'ichiji', t:'いちじ (ichiji)'},
+          {h:'いちじさんぷん', r:'ichiji sanpun', t:'いちじさんぷん'}
+        ],
+        answer: 0
+      },
+      {
+        prompt: '“Jam sembilan” dalam bahasa Jepang adalah…',
+        options: [
+          {h:'はちじ', r:'hachiji', t:'はちじ (hachiji)'},
+          {h:'くじ', r:'kuji', t:'くじ (kuji)'},
+          {h:'しちじ', r:'shichiji', t:'しちじ (shichiji)'},
+          {h:'じゅうじ', r:'juuji', t:'じゅうじ (juuji)'}
+        ],
+        answer: 1
+      },
+      {
+        prompt: '“Jam enam lewat lima / 6:05” dalam bahasa Jepang adalah…',
+        options: [
+          {h:'ろくじごふん', r:'rokuji gofun', t:'ろくじごふん (rokuji gofun)'},
+          {h:'ろくじはん', r:'rokuji han', t:'ろくじはん (rokuji han)'},
+          {h:'ごじ', r:'goji', t:'ごじ (goji)'},
+          {h:'しちじごふん', r:'shichiji gofun', t:'しちじごふん'}
+        ],
+        answer: 0
+      }
+    ];
+
+    /* ------------------- QUIZ STATE & ELEMENTS ------------------- */
+    let currentIndex = 0;
+    let playerName = '';
+    const answers = new Array(questions.length).fill(null);
+
+    const startBtn = document.getElementById('startBtn');
+    const nameInput = document.getElementById('playerName');
+    const quizBox = document.getElementById('quizBox');
+    const startBox = document.getElementById('startBox');
+    const qNumber = document.getElementById('qNumber');
+    const qText = document.getElementById('qText');
+    const optionsList = document.getElementById('optionsList');
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const playerLabel = document.getElementById('playerLabel');
+    const progress = document.getElementById('progress');
+    const resultBox = document.getElementById('resultBox');
+    const scoreText = document.getElementById('scoreText');
+    const reviewList = document.getElementById('reviewList');
+    const retryBtn = document.getElementById('retryBtn');
+    const backMenuBtn = document.getElementById('backMenuBtn');
+
+    // start quiz
+    startBtn.addEventListener('click', ()=>{
+      const name = nameInput.value.trim();
+      if(!name){ alert('Tolong isi nama (romaji) sebelum mulai.'); nameInput.focus(); return; }
+      playerName = name;
+      playerLabel.textContent = playerName;
+      // show quiz card
+      startBox.style.display = 'none';
+      quizBox.style.display = 'block';
+      currentIndex = 0;
+      for(let i=0;i<answers.length;i++) answers[i]=null;
+      renderQuestion();
+      // scroll to top of latihan page
+      document.getElementById('latihanPage').scrollIntoView({behavior:'smooth'});
+    });
+
+    // render question
+    function renderQuestion(){
+      const q = questions[currentIndex];
+      qNumber.textContent = `Soal ${currentIndex+1} / ${questions.length}`;
+      qText.textContent = q.prompt;
+      progress.textContent = `${currentIndex+1} / ${questions.length}`;
+      optionsList.innerHTML = '';
+      q.options.forEach((opt, idx)=>{
+        const b = document.createElement('button');
+        b.className = 'opt-btn';
+        b.type = 'button';
+        b.innerHTML = `<div style="font-weight:700">${opt.h}</div><div class="small" style="margin-top:6px">${opt.r} — ${opt.t}</div>`;
+        if(answers[currentIndex] === idx) b.classList.add('selected');
+        b.addEventListener('click', ()=>{
+          // deselect siblings
+          Array.from(optionsList.children).forEach(c=>c.classList.remove('selected'));
+          b.classList.add('selected');
+          answers[currentIndex] = idx;
+        });
+        optionsList.appendChild(b);
+      });
+      prevBtn.style.display = currentIndex > 0 ? 'inline-block' : 'none';
+      nextBtn.textContent = (currentIndex === questions.length - 1) ? 'スコアをみる (Lihat Skor)' : 'つぎへ (Berikutnya)';
+    }
+
+    // prev
+    prevBtn.addEventListener('click', ()=>{
+      if(currentIndex > 0){ currentIndex--; renderQuestion(); scrollToQuiz(); }
+    });
+
+    // next / finish
+    nextBtn.addEventListener('click', ()=>{
+      // if answer not chosen, allow proceed after confirm
+      if(answers[currentIndex] === null){
+        if(!confirm('Kamu belum memilih jawaban untuk soal ini. Lanjut tanpa memilih?')) return;
+      }
+      if(currentIndex < questions.length - 1){
+        currentIndex++; renderQuestion(); scrollToQuiz();
+      } else {
+        // finish: show results
+        showResult();
+        scrollToQuiz();
+      }
+    });
+
+    function showResult(){
+      quizBox.style.display = 'none';
+      resultBox.style.display = 'block';
+      // compute score
+      let score = 0;
+      reviewList.innerHTML = '';
+      questions.forEach((q, i)=>{
+        const user = answers[i];
+        const correct = q.answer;
+        const item = document.createElement('div');
+        item.className = 'review-item';
+        const qNo = document.createElement('div');
+        qNo.style.fontWeight = '700';
+        qNo.textContent = `${i+1}. ${q.prompt}`;
+        const your = document.createElement('div');
+        your.style.marginTop = '6px';
+        if(user === null){
+          your.innerHTML = `Jawaban kamu: <span class="wrong">— belum dipilih —</span>`;
+        } else {
+          const u = q.options[user];
+          const html = `${u.h} (${u.r})`;
+          if(user === correct){
+            your.innerHTML = `Jawaban kamu: <span class="correct">${html} — (Benar)</span>`;
+            score++;
+          } else {
+            your.innerHTML = `Jawaban kamu: <span class="wrong">${html} — (Salah)</span>`;
+          }
+        }
+        const correctDiv = document.createElement('div');
+        const corrOpt = q.options[correct];
+        correctDiv.innerHTML = `Jawaban benar: <span class="correct">${corrOpt.h} (${corrOpt.r})</span>`;
+        item.appendChild(qNo); item.appendChild(your); item.appendChild(correctDiv);
+        reviewList.appendChild(item);
+      });
+      scoreText.textContent = `Skor: ${score} / ${questions.length}`;
+    }
+
+    // retry
+    retryBtn.addEventListener('click', ()=>{
+      resultBox.style.display = 'none';
+      startBox.style.display = 'flex';
+      nameInput.value = '';
+      playerLabel.textContent = '';
+      document.getElementById('latihanPage').scrollIntoView({behavior:'smooth'});
+    });
+
+    // back to menu
+    backMenuBtn.addEventListener('click', ()=>{
+      resultBox.style.display = 'none';
+      startBox.style.display = 'flex';
+      nameInput.value = '';
+      playerLabel.textContent = '';
+      showPage('menu');
+    });
+
+    // helper
+    function scrollToQuiz(){ document.getElementById('latihanPage').scrollIntoView({behavior:'smooth'}); }
+    function hideQuizAll(){
+      quizBox.style.display = 'none';
+      resultBox.style.display = 'none';
+      startBox.style.display = 'flex';
+      nameInput.value = '';
+      playerLabel.textContent = '';
+    }
+
+    // allow Enter to start
+    nameInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ startBtn.focus(); startBtn.click(); } });
+
+    // on initial load, show menu
+    showPage('menu');
+  </script>
+</body>
+</html>

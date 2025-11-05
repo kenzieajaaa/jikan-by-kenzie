@@ -145,15 +145,9 @@
       <h2>🎯 Latihan Soal — じかんのクイズ</h2>
 
       <!-- start box -->
-      <div id="startBox" class="quiz-start">
-        <div style="flex:1">
-          <p class="note">Masukkan nama kamu (romaji):</p>
-          <input type="text" id="playerName" placeholder="contoh: rizky" maxlength="30">
-        </div>
-        <div style="display:flex;align-items:center">
-          <button class="btn" id="startBtn">▶ はじめる (Mulai)</button>
-        </div>
-      </div>
+     <div id="startBox" class="quiz-start">
+  <button class="btn" id="startBtn">▶ はじめる (Mulai)</button>
+</div>
 
       <!-- quiz card -->
       <div id="quizBox" class="quiz-card" style="display:none">
@@ -302,11 +296,18 @@
     const backMenuBtn = document.getElementById('backMenuBtn');
 
     // start quiz
-    startBtn.addEventListener('click', ()=>{
-      const name = nameInput.value.trim();
-      if(!name){ alert('Tolong isi nama (romaji) sebelum mulai.'); nameInput.focus(); return; }
-      playerName = name;
-      playerLabel.textContent = playerName;
+startBtn.addEventListener('click', ()=>{
+  playerName = "Player"; // atau "Siswa"
+  playerLabel.textContent = playerName;
+
+  startBox.style.display = 'none';
+  quizBox.style.display = 'block';
+  currentIndex = 0;
+  for(let i=0;i<answers.length;i++) answers[i]=null;
+  renderQuestion();
+  document.getElementById('latihanPage').scrollIntoView({behavior:'smooth'});
+});
+
       // show quiz card
       startBox.style.display = 'none';
       quizBox.style.display = 'block';
@@ -315,7 +316,7 @@
       renderQuestion();
       // scroll to top of latihan page
       document.getElementById('latihanPage').scrollIntoView({behavior:'smooth'});
-    });
+    ;
 
     // render question
     function renderQuestion(){

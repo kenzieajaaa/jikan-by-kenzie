@@ -1,438 +1,651 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>にほんごのじかん — Menu</title>
+  <title>Media Ajar JIKAN - Flashcards</title>
+  <meta name="description" content="Media Ajar JIKAN - Interaktif untuk SMA" />
   <style>
-    :root{
-      --bg: #eaf7ef;
-      --card: #ffffff;
-      --accent: #2e7d32;
-      --accent-2: #66bb6a;
-      --muted: #4b6b50;
-      --glass: rgba(255,255,255,0.9);
-      --shadow: 0 8px 22px rgba(46,125,50,0.08);
-      --radius:14px;
-      font-family: "Poppins", "Noto Sans JP", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-    }
+    .tabel-materi {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(4px);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.tabel-materi th {
+  background: rgba(255,255,255,0.09);
+  padding: 10px;
+  text-align: left;
+}
+
+.tabel-materi td {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.tabel-materi tr:nth-child(even) {
+  background: rgba(255,255,255,0.03);
+}
+
+.tabel-materi tr:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+    :root{--bg:#0a1224;--accent1:#7c3aed;--accent2:#06b6d4;--card:#0b1220}
     *{box-sizing:border-box}
-    body{margin:0;background:linear-gradient(180deg,var(--bg),#f6fff6);color:#123;}
-    .container{max-width:920px;margin:28px auto;padding:18px}
-    /* Card */
-    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
-    header{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:18px}
-    h1{margin:0;color:var(--accent);font-size:1.9rem}
-    p.subtitle{margin:0;color:var(--muted)}
-    /* Menu buttons vertical */
-    .menu{display:flex;flex-direction:column;gap:14px;align-items:center;margin-top:18px}
-    .big-btn{width:80%;max-width:420px;padding:14px 18px;border-radius:12px;border:none;background:var(--accent-2);color:white;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,0.06)}
-    .big-btn.ghost{background:transparent;border:2px solid #dff2df;color:var(--accent)}
-    /* pages */
-    .page{display:none;margin-top:18px}
+    body{margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;background:linear-gradient(180deg,#071024 0%, #071a2a 60%);color:#e6eef8}
+    header.hero{padding:48px 20px;text-align:center;background:linear-gradient(135deg,var(--accent1),var(--accent2));border-bottom-left-radius:40px;border-bottom-right-radius:40px}
+    header.hero h1{margin:0;font-size:2.4rem}
+    header.hero p{margin:8px 0 0;opacity:0.95}
+    .container{max-width:980px;margin:24px auto;padding:20px}
+    .menu-grid{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+    .card{background:rgba(255,255,255,0.04);padding:18px;border-radius:16px;backdrop-filter:blur(6px);width:260px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,0.4);transition:transform .25s}
+    .card:hover{transform:translateY(-8px)}
+    .btn{padding:10px 14px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#021322;font-weight:700;cursor:pointer;width:100%}
+    .page{display:none;max-width:760px;margin:22px auto;padding:12px}
     .page.active{display:block}
-    h2{color:var(--accent);margin:0 0 8px 0}
-    .muted{color:var(--muted)}
-    table{width:100%;border-collapse:collapse;margin-top:12px}
-    th,td{border:1px solid #e7f3e7;padding:8px;text-align:center;font-size:0.95rem}
-    th{background:#f0fff0;color:var(--accent)}
-    /* quiz */
-    .quiz-start{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-    input[type="text"]{padding:10px;border-radius:10px;border:1px solid #dfefe0;width:260px}
-    .note{font-size:0.92rem;color:var(--muted)}
-    .quiz-card{background:#fbfff9;border-radius:12px;padding:14px;border:1px solid #e6f6e6;margin-top:12px}
-    .q-number{font-weight:700;color:var(--accent)}
-    .q-text{font-size:1.05rem;margin-top:8px}
-    .options{display:flex;flex-direction:column;gap:8px;margin-top:10px}
-    .opt-btn{padding:10px;border-radius:10px;border:1px solid #e6efe6;background:#fff;cursor:pointer;text-align:left}
-    .opt-btn.selected{background:#e7f6ea;border-color:var(--accent-2)}
-    .controls{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
-    .btn{padding:10px 14px;border-radius:10px;border:none;background:var(--accent-2);color:white;font-weight:700;cursor:pointer}
-    .btn.ghost{background:transparent;color:var(--accent);border:1px solid #dff2df}
-    .result-box{background:#fbfff9;border:1px dashed #dff2df;padding:12px;border-radius:10px;margin-top:12px}
-    .review-item{padding:10px;border-bottom:1px solid #eef7ee}
-    .correct{color:green;font-weight:700}
-    .wrong{color:#c62828;font-weight:700}
-    .small{font-size:0.88rem;color:var(--muted)}
-    footer{text-align:center;color:var(--muted);margin-top:18px;font-size:0.9rem}
-    @media (max-width:720px){ .big-btn{width:92%} input[type="text"]{width:100%} }
+    .muted{color:rgba(230,238,248,0.78)}
+    .back-btn{background:transparent;border:1px solid rgba(255,255,255,0.08);color:inherit;padding:8px 12px;border-radius:10px;cursor:pointer}
+
+    /*===entahlah===*/
+    :root{
+  --bg-main: linear-gradient(180deg,#071024 0%, #071a2a 60%);
+  --text-main: #e6eef8;
+  --card-bg: rgba(255,255,255,0.04);
+  --card-border: rgba(255,255,255,0.08);}
+  body{
+  margin:0;
+  font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+body.light{
+  --bg-main: linear-gradient(180deg,#f8fafc 0%, #e5e7eb 60%);
+  --text-main: #0f172a;
+  --card-bg: #ffffff;
+  --card-border: rgba(0,0,0,0.08);
+}
+.theme-toggle{
+  position:absolute;
+  top:16px;
+  right:16px;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.25);
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+  cursor:pointer;
+  font-weight:600;
+  backdrop-filter: blur(6px);
+}
+body.light .theme-toggle{
+  border-color: rgba(0,0,0,0.2);
+  background: rgba(0,0,0,0.05);
+  color:#0f172a;
+}
+
+body.light .muted{
+  color: rgba(15,23,42,0.7);
+}
+
+/* === FIX TABEL DI LIGHT MODE === */
+body.light table{
+  background:#ffffff;
+  color:#0f172a;
+  border-collapse: collapse;
+}
+
+body.light th,
+body.light td{
+  border:1px solid rgba(0,0,0,0.15);
+  padding:10px;
+}
+
+body.light th{
+  background:#e5e7eb;
+  font-weight:700;
+}
+
+body.light tr:nth-child(even) td{
+  background:#f8fafc;
+}
+
+
+    /* flashcard */
+    .fc-wrap{max-width:720px;margin:10px auto}
+    .fc-controls{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .fc-card{width:340px;height:220px;margin:12px auto;border-radius:14px;background:linear-gradient(135deg,rgba(255,255,255,0.03),rgba(255,255,255,0.02));box-shadow:0 12px 36px rgba(0,0,0,0.45);perspective:1000px;cursor:pointer}
+    .fc-inner{width:100%;height:100%;position:relative;transition:transform .6s;transform-style:preserve-3d;border-radius:14px}
+    .fc-side{position:absolute;inset:0;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;backface-visibility:hidden}
+    .fc-back{transform:rotateY(180deg)}
+    .fc-emoji{font-size:48px;margin-bottom:8px}
+    .fc-jp{font-size:26px;font-weight:700}
+    .fc-romaji{opacity:0.9;margin-top:6px}
+
+    input[type=text]{padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);width:70%;max-width:420px}
+    .result{font-weight:700;margin-top:10px}
+
+    @media(max-width:720px){.fc-card{width:92%;height:220px}}
+
+    /* ===== QUIZ CARD ===== */
+.quiz-card{
+  background: rgba(255,255,255,0.04);
+  padding: 20px;
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+  width: 100%;
+  max-width: 760px;
+  margin: 16px auto;
+  box-shadow: 0 10px 32px rgba(0,0,0,0.45);
+  text-align: left;
+}
+
+/* kunci radio di hasil quiz tanpa disable */
+.locked input[type="radio"] {
+  pointer-events: none;
+}
+
   </style>
 </head>
 <body>
+  <header class="hero">
+    <h1>にほんごのじかん — Media Ajar</h1>
+    <p>Flashcards & kuis: belajar menyebutkan jam dalam Bahasa Jepang (じかん)</p>
+    <button id="themeToggle" class="theme-toggle">☀️ Mode Terang</button>
+  </header>
+
   <div class="container">
-
+    
     <!-- MENU -->
-    <div id="menuPage" class="card page active">
-      <header>
-        <h1>にほんごのじかん</h1>
-        <p class="subtitle">Ayo belajar menyebutkan jam dalam Bahasa Jepang (じかん)</p>
-      </header>
-
-      <div class="menu">
-        <button class="big-btn" data-nav="about">Tentang</button>
-        <button class="big-btn" data-nav="materi">Materi</button>
-        <button class="big-btn" data-nav="latihan">Latihan Soal</button>
+    <div id="menuPage" class="page active">
+      <div class="menu-grid">
+        <div class="card">
+          <h3>🃏 Flashcard</h3>
+          <p class="muted">Belajar jam Jepang melalui kartu interaktif.</p>
+          <button class="btn" data-nav="about">Buka</button>
+        </div>
+        <div class="card">
+          <h3>📚 Materi</h3>
+          <p class="muted">Kosakata dasar beserta Tabel jam & menit.</p>
+          <button class="btn" data-nav="materi">Belajar</button>
+        </div>
+        <div class="card">
+          <h3>🎯 Latihan</h3>
+          <p class="muted">Kuis interaktif untuk menguji pemahaman.</p>
+          <button class="btn" data-nav="latihan">Mulai</button>
+        </div>
       </div>
     </div>
 
     <!-- ABOUT PAGE -->
-    <div id="aboutPage" class="card page">
-      <h2>📖 Tentang</h2>
-      <p class="muted">Media pembelajaran ini dibuat untuk membantu siswa SMA memahami cara menyebutkan waktu (じ) dan menit (ふん／ぷん) dalam bahasa Jepang secara interaktif. Setelah mempelajari materi, siswa dapat mencoba latihan pilihan ganda untuk menguji pemahaman.</p>
+    <div id="aboutPage" class="page">
+      <h2 style="text-align:center">🕒 Flashcards — Menyebutkan Jam (じかん)</h2>
 
-      <div style="margin-top:14px; text-align:right">
-        <button class="btn ghost" data-nav="menu">🔙 Kembali ke Menu</button>
+      <div class="fc-wrap">
+        <div class="fc-controls" style="margin-top:12px">
+          <button class="back-btn" id="fcShuffleBtn">Acak</button>
+        </div>
+
+        <div id="fcCard" class="fc-card">
+          <div class="fc-inner" id="fcInner">
+            <div class="fc-side fc-front">
+              <div class="fc-emoji" id="fcEmojiFront">🕐</div>
+              <div class="fc-jp" id="fcJp">いちじ</div>
+              <div class="fc-romaji" id="fcRomaji">ichiji</div>
+            </div>
+            <div class="fc-side fc-back">
+              <div class="fc-emoji" id="fcEmojiBack">🕐</div>
+              <div class="fc-jp" id="fcIdn">Jam satu</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:12px">
+          <button class="back-btn" id="fcPrev">←</button>
+          <div id="fcCounter" style="min-width:120px;text-align:center">1 / 12</div>
+          <button class="back-btn" id="fcNext">→</button>
+        </div>
+
+        <div id="fcQuizArea" style="display:none;text-align:center;margin-top:16px">
+          <p id="fcQuestion" style="font-weight:700">Tulis hiragana untuk: <span id="fcQuestionText">Jam satu</span></p>
+          <input type="text" id="fcAnswer" placeholder="Tulis hiragana..." />
+          <div style="margin-top:10px"><button class="btn" id="fcCheck">Periksa</button></div>
+          <div id="fcResult" class="result"></div>
+        </div>
+      </div>
+
+      <div style="margin-top:18px;text-align:right">
+        <button class="btn" data-nav="menu">🏠 Kembali ke Menu</button>
       </div>
     </div>
 
     <!-- MATERI PAGE -->
-    <div id="materiPage" class="card page">
-      <h2>📚 Materi: Menyatakan Jam (じかん)</h2>
+    <div id="materiPage" class="page">
+  <h2>📚 Materi: Menyatakan Jam (じかん)</h2>
 
-      <h3>1️⃣ Kosakata Dasar（たんご）</h3>
-      <table>
-        <tr><th>Indonesia</th><th>ひらがな</th><th>Romaji</th><th>Arti</th></tr>
-        <tr><td>Jam (waktu)</td><td>じ</td><td>ji</td><td>Penanda jam</td></tr>
-        <tr><td>Menit</td><td>ふん／ぷん</td><td>fun / pun</td><td>Penanda menit</td></tr>
-        <tr><td>30 Menit</td><td>はん</td><td>han</td><td>30 Menit</td></tr>
-        <tr><td>Sekarang</td><td>いま</td><td>ima</td><td>Sekarang</td></tr>
-        <tr><td>Pagi</td><td>ごぜん</td><td>gozen</td><td>AM</td></tr>
-        <tr><td>Sore / malam</td><td>ごご</td><td>gogo</td><td>PM</td></tr>
-      </table>
+  <h3>1️⃣ Kosakata Dasar（たんご）</h3>
+  <table class="tabel-materi">
+    <tr><th>Indonesia</th><th>ひらがな</th><th>Romaji</th><th>Arti</th></tr>
+    <tr><td>Jam (waktu)</td><td>じ</td><td>ji</td><td>Penanda jam</td></tr>
+    <tr><td>Menit</td><td>ふん／ぷん</td><td>fun/pun</td><td>Penanda menit</td></tr>
+    <tr><td>30 Menit</td><td>はん</td><td>han</td><td>Setengah</td></tr>
+    <tr><td>Sekarang</td><td>いま</td><td>ima</td><td>Sekarang</td></tr>
+    <tr><td>Pagi (AM)</td><td>ごぜん</td><td>gozen</td><td>AM</td></tr>
+    <tr><td>Malam (PM)</td><td>ごご</td><td>gogo</td><td>PM</td></tr>
+  </table>
 
-      <h3 style="margin-top:12px">2️⃣ Menyebutkan Jam</h3>
-      <p class="small"><strong>Struktur:</strong> [angka] + じ</p>
-      <table>
-        <tr><th>Angka</th><th>Hiragana</th><th>Romaji</th><th>Arti</th></tr>
-        <tr><td>1じ</td><td>いちじ</td><td>ichiji</td><td>jam 1</td></tr>
-        <tr><td>2じ</td><td>にじ</td><td>niji</td><td>jam 2</td></tr>
-        <tr><td>3じ</td><td>さんじ</td><td>sanji</td><td>jam 3</td></tr>
-        <tr><td>4じ</td><td>よじ</td><td>yoji</td><td>jam 4</td></tr>
-        <tr><td>5じ</td><td>ごじ</td><td>goji</td><td>jam 5</td></tr>
-        <tr><td>6じ</td><td>ろくじ</td><td>rokuji</td><td>jam 6</td></tr>
-        <tr><td>7じ</td><td>しちじ</td><td>shichiji</td><td>jam 7</td></tr>
-        <tr><td>8じ</td><td>はちじ</td><td>hachiji</td><td>jam 8</td></tr>
-        <tr><td>9じ</td><td>くじ</td><td>kuji</td><td>jam 9</td></tr>
-        <tr><td>10じ</td><td>じゅうじ</td><td>juuji</td><td>jam 10</td></tr>
-        <tr><td>11じ</td><td>じゅういちじ</td><td>juuichiji</td><td>jam 11</td></tr>
-        <tr><td>12じ</td><td>じゅうにじ</td><td>juuniji</td><td>jam 12</td></tr>
-      </table>
+  <h3>2️⃣ Menyebutkan Jam</h3>
+  <p class="small"><strong>Struktur:</strong> [angka] + じ</p>
+  <table class="tabel-materi">
+    <tr><th>Angka</th><th>ひらがな</th><th>Romaji</th><th>Arti</th></tr>
+    <tr><td>1じ</td><td>いちじ</td><td>ichiji</td><td>Jam 1</td></tr>
+    <tr><td>2じ</td><td>にじ</td><td>niji</td><td>Jam 2</td></tr>
+    <tr><td>3じ</td><td>さんじ</td><td>sanji</td><td>Jam 3</td></tr>
+    <tr><td>4じ</td><td>よじ</td><td>yoji</td><td>Jam 4</td></tr>
+    <tr><td>5じ</td><td>ごじ</td><td>goji</td><td>Jam 5</td></tr>
+    <tr><td>6じ</td><td>ろくじ</td><td>rokuji</td><td>Jam 6</td></tr>
+    <tr><td>7じ</td><td>しちじ</td><td>shichiji</td><td>Jam 7</td></tr>
+    <tr><td>8じ</td><td>はちじ</td><td>hachiji</td><td>Jam 8</td></tr>
+    <tr><td>9じ</td><td>くじ</td><td>kuji</td><td>Jam 9</td></tr>
+    <tr><td>10じ</td><td>じゅうじ</td><td>juuji</td><td>Jam 10</td></tr>
+    <tr><td>11じ</td><td>じゅういちじ</td><td>juuichiji</td><td>Jam 11</td></tr>
+    <tr><td>12じ</td><td>じゅうにじ</td><td>juuniji</td><td>Jam 12</td></tr>
+  </table>
 
-      <h3 style="margin-top:12px">3️⃣ Menit</h3>
-      <p class="small"><strong>Struktur:</strong> [angka] + ふん／ぷん</p>
-      <table>
-        <tr><th>Angka</th><th>Hiragana</th><th>Romaji</th><th>Arti</th></tr>
-        <tr><td>1ぷん</td><td>いっぷん</td><td>ippun</td><td>1 menit</td></tr>
-        <tr><td>2ふん</td><td>にふん</td><td>nifun</td><td>2 menit</td></tr>
-        <tr><td>3ぷん</td><td>さんぷん</td><td>sanpun</td><td>3 menit</td></tr>
-        <tr><td>4ぷん</td><td>よんぷん</td><td>yonpun</td><td>4 menit</td></tr>
-        <tr><td>5ふん</td><td>ごふん</td><td>gofun</td><td>5 menit</td></tr>
-        <tr><td>6ぷん</td><td>ろっぷん</td><td>roppun</td><td>6 menit</td></tr>
-        <tr><td>7ふん</td><td>ななふん</td><td>nanafun</td><td>7 menit</td></tr>
-        <tr><td>8ぷん</td><td>はっぷん</td><td>happun</td><td>8 menit</td></tr>
-        <tr><td>9ふん</td><td>きゅうふん</td><td>kyuufun</td><td>9 menit</td></tr>
-        <tr><td>10ぷん</td><td>じゅっぷん／じっぷん</td><td>juppun / jippun</td><td>10 menit</td></tr>
-        <tr><td>30ぷん</td><td>さんじゅっぷん</td><td>sanjuppun</td><td>30 menit</td></tr>
-      </table>
+  <h3>3️⃣ Menit (ふん／ぷん)</h3>
+  <table class="tabel-materi">
+    <tr><th>Angka</th><th>ひらがな</th><th>Romaji</th><th>Arti</th></tr>
+    <tr><td>1ぷん</td><td>いっぷん</td><td>ippun</td><td>1 menit</td></tr>
+    <tr><td>2ふん</td><td>にふん</td><td>nifun</td><td>2 menit</td></tr>
+    <tr><td>3ぷん</td><td>さんぷん</td><td>sanpun</td><td>3 menit</td></tr>
+    <tr><td>4ぷん</td><td>よんぷん</td><td>yonpun</td><td>4 menit</td></tr>
+    <tr><td>5ふん</td><td>ごふん</td><td>gofun</td><td>5 menit</td></tr>
+    <tr><td>6ぷん</td><td>ろっぷん</td><td>roppun</td><td>6 menit</td></tr>
+    <tr><td>7ふん</td><td>ななふん</td><td>nanafun</td><td>7 menit</td></tr>
+    <tr><td>8ぷん</td><td>はっぷん</td><td>happun</td><td>8 menit</td></tr>
+    <tr><td>9ふん</td><td>きゅうふん</td><td>kyuufun</td><td>9 menit</td></tr>
+    <tr><td>10ぷん</td><td>じゅっぷん</td><td>juppun</td><td>10 menit</td></tr>
+    <tr><td>30ぷん</td><td>さんじゅっぷん</td><td>sanjuppun</td><td>30 menit</td></tr>
+  </table>
 
-      <div style="margin-top:14px; text-align:right">
-        <button class="btn ghost" data-nav="menu">🔙 Kembali ke Menu</button>
-      </div>
-    </div>
-
-    <!-- LATIHAN PAGE -->
-    <div id="latihanPage" class="card page">
-      <h2>🎯 Latihan Soal — じかんのクイズ</h2>
-
-      <!-- start box -->
-     <div id="startBox" class="quiz-start">
-  <button class="btn" id="startBtn">▶ はじめる (Mulai)</button>
+  <div style="margin-top:14px;text-align:right">
+   <button class="btn" data-nav="menu">🏠 Kembali ke Menu</button>
+  </div>
 </div>
 
-      <!-- quiz card -->
-      <div id="quizBox" class="quiz-card" style="display:none">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <div class="q-number" id="qNumber">Soal 1 / 5</div>
-            <div class="q-text" id="qText">--</div>
-            <div class="small">Pilih jawaban lalu tekan 「つぎへ」</div>
-          </div>
-          <div style="text-align:right">
-            <div class="small">Nama: <span id="playerLabel"></span></div>
-            <div class="small" style="margin-top:6px">Soal: <span id="progress">1 / 5</span></div>
-          </div>
-        </div>
 
-        <div class="options" id="optionsList"></div>
+    <!-- LATIHAN PAGE -->
+<div id="latihanPage" class="page">
+  <h2>🎯 Latihan Soal — じかんのクイズ</h2>
 
-        <div class="controls">
-          <button class="btn ghost" id="prevBtn" style="display:none">◀ もどる (Sebelumnya)</button>
-          <button class="btn" id="nextBtn">つぎへ (Berikutnya)</button>
-        </div>
-      </div>
+  <div id="quizBox" style="display:none">
+    <div class="quiz-card">
+      <div id="quizList"></div>
 
-      <!-- result -->
-      <div id="resultBox" class="quiz-card" style="display:none">
-        <h3>スコア (Hasil)</h3>
-        <div class="result-box">
-          <div id="scoreText" style="font-weight:800; font-size:1.05rem">Skor: 0 / 5</div>
-          <div class="small" style="margin-top:6px">おつかれさま！ (Otsukaresama!) — Lihat rekap jawaban di bawah.</div>
-        </div>
-
-        <div id="reviewList" class="review" style="margin-top:10px"></div>
-
-        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
-          <button class="btn ghost" id="retryBtn">🔁 もういちど (Ulangi)</button>
-          <button class="btn" id="backMenuBtn">🏠 メニュー (Kembali ke Menu)</button>
-        </div>
-      </div>
-
-      <div style="margin-top:12px; text-align:right">
-        <button class="btn ghost" data-nav="menu">🔙 Kembali ke Menu</button>
-      </div>
+      <button class="btn" id="finishBtn" style="margin-top:16px">
+        ✅ Selesai
+      </button>
     </div>
-
   </div>
 
+  <!-- HASIL KUIS -->
+  <div id="resultBox" style="display:none" class="quiz-card">
+    <h3>Hasil</h3>
+    <div id="scoreText" style="font-weight:700;margin-top:8px"></div>
+    <div id="reviewList" style="margin-top:12px"></div>
+    <button class="btn" id="retryBtn" style="margin-top:14px">🔁 Ulangi</button>
+  </div>
+
+  <!-- TOMBOL MENU (KHUSUS LATIHAN) -->
+  <div style="margin-top:20px;text-align:right">
+    <button class="btn" data-nav="menu">🏠 Kembali ke Menu</button>
+  </div>
+
+</div>
+
+
+</div>
+  <div id="resultBox" style="display:none" class="quiz-card">
+    <h3>Hasil</h3>
+    <div id="scoreText" style="font-weight:700;margin-top:8px"></div>
+    <div id="reviewList" style="margin-top:12px"></div>
+    <button class="btn" id="retryBtn" style="margin-top:14px">🔁 Ulangi</button>
+  </div>
+</div>
+
+
+
+ 
   <script>
-    /* ------------------- NAVIGATION ------------------- */
-    function showPage(id){
-      document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-      const el = document.getElementById(id + 'Page');
-      if(el) el.classList.add('active');
-      // scroll to top of container
-      window.scrollTo({top:0,behavior:'smooth'});
-      // hide quiz UI if switching away
-      if(id !== 'latihan') hideQuizAll();
-    }
 
-    // menu buttons
-    document.querySelectorAll('[data-nav]').forEach(btn=>{
-      btn.addEventListener('click', ()=> {
+    /* navigation fix */
+    document.querySelectorAll('[data-nav]').forEach(btn => {
+      btn.addEventListener('click', () => {
         const target = btn.getAttribute('data-nav');
-        showPage(target);
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(target + 'Page').classList.add('active');
+        window.scrollTo({top:0,behavior:'smooth'});
       });
     });
 
-    // also allow nav from ghost buttons
-    document.querySelectorAll('[data-nav="menu"]').forEach(b=>{
-      b.addEventListener('click', ()=> showPage('menu'));
-    });
+    /* flashcard logic */
+    (function(){
+      const cards=[
+       {emoji:'🕐',jp:'いちじ',rom:'ichiji',idn:'Jam satu'},
+        {emoji:'🕑',jp:'にじ',rom:'niji',idn:'Jam dua'},
+        {emoji:'🕒',jp:'さんじ',rom:'sanji',idn:'Jam tiga'},
+        {emoji:'🕓',jp:'よじ',rom:'yoji',idn:'Jam empat'},
+        {emoji:'🕔',jp:'ごじ',rom:'goji',idn:'Jam lima'},
+        {emoji:'🕕',jp:'ろくじ',rom:'rokuji',idn:'Jam enam'},
+        {emoji:'🕖',jp:'しちじ',rom:'shichiji',idn:'Jam tujuh'},
+        {emoji:'🕗',jp:'はちじ',rom:'hachiji',idn:'Jam delapan'},
+        {emoji:'🕘',jp:'くじ',rom:'kuji',idn:'Jam sembilan'},
+        {emoji:'🕙',jp:'じゅうじ',rom:'juuji',idn:'Jam sepuluh'},
+        {emoji:'🕚',jp:'じゅういちじ',rom:'juuichiji',idn:'Jam sebelas'},
+        {emoji:'🕛',jp:'じゅうにじ',rom:'juuniji',idn:'Jam dua belas'}
+      ];
 
-    /* ------------------- QUIZ DATA ------------------- */
-    const questions = [
-      {
-        prompt: '“Jam empat” dalam bahasa Jepang adalah…',
-        options: [
-          {h:'よじ', r:'yoji', t:'よじ (yoji)'},
-          {h:'しちじ', r:'shichiji', t:'しちじ (shichiji)'},
-          {h:'はちじ', r:'hachiji', t:'はちじ (hachiji)'},
-          {h:'じゅうじ', r:'juuji', t:'じゅうじ (juuji)'}
-        ],
-        answer: 0
-      },
-      {
-        prompt: '“Jam tiga” dalam bahasa Jepang adalah…',
-        options: [
-          {h:'ろくじ', r:'rokuji', t:'ろくじ (rokuji)'},
-          {h:'さんじ', r:'sanji', t:'さんじ (sanji)'},
-          {h:'にじ', r:'niji', t:'にじ (niji)'},
-          {h:'ごじ', r:'goji', t:'ごじ (goji)'}
-        ],
-        answer: 1
-      },
-      {
-        prompt: '“Jam satu setengah / 1:30” dalam bahasa Jepang adalah…',
-        options: [
-          {h:'いちじはん', r:'ichiji han', t:'いちじはん (ichiji han)'},
-          {h:'にじはん', r:'niji han', t:'にじはん (niji han)'},
-          {h:'いちじ', r:'ichiji', t:'いちじ (ichiji)'},
-          {h:'いちじさんぷん', r:'ichiji sanpun', t:'いちじさんぷん'}
-        ],
-        answer: 0
-      },
-      {
-        prompt: '“Jam sembilan” dalam bahasa Jepang adalah…',
-        options: [
-          {h:'はちじ', r:'hachiji', t:'はちじ (hachiji)'},
-          {h:'くじ', r:'kuji', t:'くじ (kuji)'},
-          {h:'しちじ', r:'shichiji', t:'しちじ (shichiji)'},
-          {h:'じゅうじ', r:'juuji', t:'じゅうじ (juuji)'}
-        ],
-        answer: 1
-      },
-      {
-        prompt: '“Jam enam lewat lima / 6:05” dalam bahasa Jepang adalah…',
-        options: [
-          {h:'ろくじごふん', r:'rokuji gofun', t:'ろくじごふん (rokuji gofun)'},
-          {h:'ろくじはん', r:'rokuji han', t:'ろくじはん (rokuji han)'},
-          {h:'ごじ', r:'goji', t:'ごじ (goji)'},
-          {h:'しちじごふん', r:'shichiji gofun', t:'しちじごふん'}
-        ],
-        answer: 0
+      let idx=0;
+
+      const fcInner=document.getElementById('fcInner');
+      const fcCard=document.getElementById('fcCard');
+      const fcEmojiFront=document.getElementById('fcEmojiFront');
+      const fcEmojiBack=document.getElementById('fcEmojiBack');
+      const fcJp=document.getElementById('fcJp');
+      const fcRomaji=document.getElementById('fcRomaji');
+      const fcIdn=document.getElementById('fcIdn');
+      const fcCounter=document.getElementById('fcCounter');
+      const fcPrev=document.getElementById('fcPrev');
+      const fcNext=document.getElementById('fcNext');
+      const fcQuizBtn=document.getElementById('fcQuizBtn');
+      const fcShuffleBtn=document.getElementById('fcShuffleBtn');
+      const fcQuizArea=document.getElementById('fcQuizArea');
+      const fcQuestionText=document.getElementById('fcQuestionText');
+      const fcAnswer=document.getElementById('fcAnswer');
+      const fcCheck=document.getElementById('fcCheck');
+      const fcResult=document.getElementById('fcResult');
+
+      function render(i){
+        const c=cards[i];
+        fcEmojiFront.textContent=c.emoji;
+        fcEmojiBack.textContent=c.emoji;
+        fcJp.textContent=c.jp;
+        fcRomaji.textContent=c.rom;
+        fcIdn.textContent=c.idn;
+        fcCounter.textContent=`${i+1} / ${cards.length}`;
+        fcInner.style.transform='none';
+        fcCard.classList.remove('flipped');
+        fcResult.textContent='';
       }
-    ];
 
-    /* ------------------- QUIZ STATE & ELEMENTS ------------------- */
-    let currentIndex = 0;
-    let playerName = '';
-    const answers = new Array(questions.length).fill(null);
-
-    const startBtn = document.getElementById('startBtn');
-    const nameInput = document.getElementById('playerName');
-    const quizBox = document.getElementById('quizBox');
-    const startBox = document.getElementById('startBox');
-    const qNumber = document.getElementById('qNumber');
-    const qText = document.getElementById('qText');
-    const optionsList = document.getElementById('optionsList');
-    const nextBtn = document.getElementById('nextBtn');
-    const prevBtn = document.getElementById('prevBtn');
-    const playerLabel = document.getElementById('playerLabel');
-    const progress = document.getElementById('progress');
-    const resultBox = document.getElementById('resultBox');
-    const scoreText = document.getElementById('scoreText');
-    const reviewList = document.getElementById('reviewList');
-    const retryBtn = document.getElementById('retryBtn');
-    const backMenuBtn = document.getElementById('backMenuBtn');
-
-    // start quiz
-startBtn.addEventListener('click', ()=>{
-  playerName = "Player"; // atau "Siswa"
-  playerLabel.textContent = playerName;
-
-  startBox.style.display = 'none';
-  quizBox.style.display = 'block';
-  currentIndex = 0;
-  for(let i=0;i<answers.length;i++) answers[i]=null;
-  renderQuestion();
-  document.getElementById('latihanPage').scrollIntoView({behavior:'smooth'});
-});
-
-      // show quiz card
-      startBox.style.display = 'none';
-      quizBox.style.display = 'block';
-      currentIndex = 0;
-      for(let i=0;i<answers.length;i++) answers[i]=null;
-      renderQuestion();
-      // scroll to top of latihan page
-      document.getElementById('latihanPage').scrollIntoView({behavior:'smooth'});
-    ;
-
-    // render question
-    function renderQuestion(){
-      const q = questions[currentIndex];
-      qNumber.textContent = `Soal ${currentIndex+1} / ${questions.length}`;
-      qText.textContent = q.prompt;
-      progress.textContent = `${currentIndex+1} / ${questions.length}`;
-      optionsList.innerHTML = '';
-      q.options.forEach((opt, idx)=>{
-        const b = document.createElement('button');
-        b.className = 'opt-btn';
-        b.type = 'button';
-        b.innerHTML = `<div style="font-weight:700">${opt.h}</div><div class="small" style="margin-top:6px">${opt.r} — ${opt.t}</div>`;
-        if(answers[currentIndex] === idx) b.classList.add('selected');
-        b.addEventListener('click', ()=>{
-          // deselect siblings
-          Array.from(optionsList.children).forEach(c=>c.classList.remove('selected'));
-          b.classList.add('selected');
-          answers[currentIndex] = idx;
-        });
-        optionsList.appendChild(b);
-      });
-      prevBtn.style.display = currentIndex > 0 ? 'inline-block' : 'none';
-      nextBtn.textContent = (currentIndex === questions.length - 1) ? 'スコアをみる (Lihat Skor)' : 'つぎへ (Berikutnya)';
-    }
-
-    // prev
-    prevBtn.addEventListener('click', ()=>{
-      if(currentIndex > 0){ currentIndex--; renderQuestion(); scrollToQuiz(); }
-    });
-
-    // next / finish
-    nextBtn.addEventListener('click', ()=>{
-      // if answer not chosen, allow proceed after confirm
-      if(answers[currentIndex] === null){
-        if(!confirm('Kamu belum memilih jawaban untuk soal ini. Lanjut tanpa memilih?')) return;
-      }
-      if(currentIndex < questions.length - 1){
-        currentIndex++; renderQuestion(); scrollToQuiz();
-      } else {
-        // finish: show results
-        showResult();
-        scrollToQuiz();
-      }
-    });
-
-    function showResult(){
-      quizBox.style.display = 'none';
-      resultBox.style.display = 'block';
-      // compute score
-      let score = 0;
-      reviewList.innerHTML = '';
-      questions.forEach((q, i)=>{
-        const user = answers[i];
-        const correct = q.answer;
-        const item = document.createElement('div');
-        item.className = 'review-item';
-        const qNo = document.createElement('div');
-        qNo.style.fontWeight = '700';
-        qNo.textContent = `${i+1}. ${q.prompt}`;
-        const your = document.createElement('div');
-        your.style.marginTop = '6px';
-        if(user === null){
-          your.innerHTML = `Jawaban kamu: <span class="wrong">— belum dipilih —</span>`;
+      fcCard.addEventListener('click',()=>{
+        if(!fcCard.classList.contains('flipped')){
+          fcInner.style.transform='rotateY(180deg)';
+          fcCard.classList.add('flipped');
         } else {
-          const u = q.options[user];
-          const html = `${u.h} (${u.r})`;
-          if(user === correct){
-            your.innerHTML = `Jawaban kamu: <span class="correct">${html} — (Benar)</span>`;
-            score++;
-          } else {
-            your.innerHTML = `Jawaban kamu: <span class="wrong">${html} — (Salah)</span>`;
-          }
+          fcInner.style.transform='none';
+          fcCard.classList.remove('flipped');
         }
-        const correctDiv = document.createElement('div');
-        const corrOpt = q.options[correct];
-        correctDiv.innerHTML = `Jawaban benar: <span class="correct">${corrOpt.h} (${corrOpt.r})</span>`;
-        item.appendChild(qNo); item.appendChild(your); item.appendChild(correctDiv);
-        reviewList.appendChild(item);
       });
-      scoreText.textContent = `Skor: ${score} / ${questions.length}`;
-    }
 
-    // retry
-    retryBtn.addEventListener('click', ()=>{
-      resultBox.style.display = 'none';
-      startBox.style.display = 'flex';
-      nameInput.value = '';
-      playerLabel.textContent = '';
-      document.getElementById('latihanPage').scrollIntoView({behavior:'smooth'});
-    });
+      fcNext.addEventListener('click',()=>{ idx=(idx+1)%cards.length; render(idx); });
+      fcPrev.addEventListener('click',()=>{ idx=(idx-1+cards.length)%cards.length; render(idx); });
 
-    // back to menu
-    backMenuBtn.addEventListener('click', ()=>{
-      resultBox.style.display = 'none';
-      startBox.style.display = 'flex';
-      nameInput.value = '';
-      playerLabel.textContent = '';
-      showPage('menu');
-    });
+      fcShuffleBtn.addEventListener('click',()=>{
+        for(let i=cards.length-1;i>0;i--){
+          const j=Math.floor(Math.random()*(i+1));
+          [cards[i],cards[j]]=[cards[j],cards[i]];
+        }
+        idx=0;
+        render(idx);
+      });
 
-    // helper
-    function scrollToQuiz(){ document.getElementById('latihanPage').scrollIntoView({behavior:'smooth'}); }
-    function hideQuizAll(){
-      quizBox.style.display = 'none';
-      resultBox.style.display = 'none';
-      startBox.style.display = 'flex';
-      nameInput.value = '';
-      playerLabel.textContent = '';
-    }
-
-    // allow Enter to start
-    nameInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ startBtn.focus(); startBtn.click(); } });
-
-    // on initial load, show menu
-    showPage('menu');
+  
+    })();
   </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const questions = [
+  {
+    q: "Jam empat dalam bahasa Jepang adalah...",
+    options: ["よじ", "しちじ", "はちじ", "じゅうじ"],
+    answer: 0
+  },
+  {
+    q: "Penanda JAM dalam bahasa Jepang adalah...",
+    options: ["ふん", "じ", "はん", "ぷん"],
+    answer: 1
+  },
+  {
+    q: "いま artinya adalah...",
+    options: ["Kemarin", "Besok", "Sekarang", "Nanti"],
+    answer: 2
+  },
+  {
+    q: "Jam 7 dalam bahasa Jepang adalah...",
+    options: ["ななじ", "しちじ", "くじ", "ろくじ"],
+    answer: 1
+  },
+  {
+    q: "ごご artinya adalah...",
+    options: ["Pagi (AM)", "Siang", "Malam (PM)", "Tengah malam"],
+    answer: 2
+  },
+  {
+    q: "Jam 11 ditulis dalam bahasa Jepang sebagai...",
+    options: ["じゅうじ", "じゅういちじ", "じゅうにじ", "いちじ"],
+    answer: 1
+  },
+  {
+    q: "Struktur dasar menyebutkan jam adalah...",
+    options: ["じ + angka", "angka + じ", "angka + ふん", "じ + ぷん"],
+    answer: 1
+  },
+  {
+    q: "Jam 9 dalam bahasa Jepang adalah...",
+    options: ["くじ", "きゅうじ", "ここのじ", "ななじ"],
+    answer: 0
+  },
+  {
+    q: "はん artinya adalah...",
+    options: ["Satu jam", "Satu menit", "Setengah", "Sekarang"],
+    answer: 2
+  },
+  {
+    q: "Jam 6 dalam bahasa Jepang adalah...",
+    options: ["ろくじ", "ごじ", "ななじ", "よじ"],
+    answer: 0
+  },
+  {
+    q: "Penanda MENIT dalam bahasa Jepang adalah...",
+    options: ["じ", "はん", "ふん／ぷん", "ごぜん"],
+    answer: 2
+  },
+  {
+    q: "1 menit dalam bahasa Jepang adalah...",
+    options: ["いちふん", "いっぷん", "いちぷん", "いっふん"],
+    answer: 1
+  },
+  {
+    q: "5 menit dalam bahasa Jepang adalah...",
+    options: ["ごぷん", "ごふん", "ごっぷん", "ごんぷん"],
+    answer: 1
+  },
+  {
+    q: "8 menit dalam bahasa Jepang adalah...",
+    options: ["はちふん", "はっぷん", "はちぷん", "はっふん"],
+    answer: 1
+  },
+  {
+    q: "10 menit dalam bahasa Jepang adalah...",
+    options: ["じゅうふん", "じゅっぷん", "じゅうぷん", "じっぷん"],
+    answer: 1
+  },
+  {
+    q: "30 menit dalam bahasa Jepang adalah...",
+    options: ["さんじゅうふん", "さんじゅっぷん", "はん", "ごじゅっぷん"],
+    answer: 1
+  },
+  {
+    q: "ごぜん artinya adalah...",
+    options: ["Malam (PM)", "Pagi (AM)", "Siang", "Sore"],
+    answer: 1
+  },
+  {
+    q: "Jam 12 dalam bahasa Jepang adalah...",
+    options: ["じゅうじ", "じゅうにじ", "にじ", "じゅういちじ"],
+    answer: 1
+  },
+  {
+    q: "Jam 3 dalam bahasa Jepang adalah...",
+    options: ["さんじ", "みじ", "よじ", "にじ"],
+    answer: 0
+  },
+  {
+    q: "2 menit dalam bahasa Jepang adalah...",
+    options: ["にぷん", "にふん", "にっぷん", "にふ"],
+    answer: 1
+  }
+];
+
+  const quizBox = document.getElementById("quizBox");
+  const quizList = document.getElementById("quizList");
+  const finishBtn = document.getElementById("finishBtn");
+
+  const resultBox = document.getElementById("resultBox");
+  const scoreText = document.getElementById("scoreText");
+  const reviewList = document.getElementById("reviewList");
+  const retryBtn = document.getElementById("retryBtn");
+
+  // langsung tampilkan quiz
+quizBox.style.display = "block";
+renderQuiz();
+
+
+  /* ================= RENDER SOAL ================= */
+  function renderQuiz(){
+    quizList.innerHTML = "";
+
+    questions.forEach((q, i) => {
+      const box = document.createElement("div");
+      box.className = "quiz-card";
+
+      let html = `<p><b>${i+1}. ${q.q}</b></p>`;
+
+      q.options.forEach((opt, idx) => {
+        html += `
+          <label style="display:block;margin:6px 0">
+            <input type="radio" name="q${i}" value="${idx}">
+            ${opt}
+          </label>
+        `;
+      });
+
+      box.innerHTML = html;
+      quizList.appendChild(box);
+    });
+  }
+
+  /* ================= FINISH / HASIL ================= */
+  finishBtn.onclick = () => {
+    let score = 0;
+    reviewList.innerHTML = "";
+
+    questions.forEach((q, i) => {
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      const userAnswer = selected ? Number(selected.value) : null;
+
+      if(userAnswer === q.answer) score++;
+
+      const div = document.createElement("div");
+      div.className = "quiz-card locked";
+
+      let optionsHtml = "";
+
+      q.options.forEach((opt, idx) => {
+        const isUser = userAnswer === idx;
+        const isCorrect = q.answer === idx;
+
+        optionsHtml += `
+          <label style="display:block;margin:6px 0">
+            <input 
+              type="radio"
+              name="result_q${i}"
+              ${isUser ? "checked" : ""}
+            >
+            ${opt} ${isCorrect ? " ✅" : ""}
+          </label>
+        `;
+      });
+
+      div.innerHTML = `
+        <p><b>${i+1}. ${q.q}</b></p>
+        ${optionsHtml}
+      `;
+
+      reviewList.appendChild(div);
+    });
+
+    quizBox.style.display = "none";
+    resultBox.style.display = "block";
+    scoreText.textContent = `Skor: ${score} / ${questions.length}`;
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  /* ================= RETRY ================= */
+  function shuffleQuestions() {
+  for (let i = questions.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [questions[i], questions[j]] = [questions[j], questions[i]];
+  }
+}
+
+ retryBtn.onclick = () => {
+  shuffleQuestions();     // acak soal
+  resultBox.style.display = "none";
+  quizBox.style.display = "block";
+  renderQuiz();
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+
+
+});
+</script>
+
+<script>
+const toggleBtn = document.getElementById("themeToggle");
+
+// load theme tersimpan
+if(localStorage.getItem("theme")==="light"){
+  document.body.classList.add("light");
+  toggleBtn.textContent = "🌙 Mode Gelap";
+}
+
+toggleBtn.onclick = () => {
+  document.body.classList.toggle("light");
+
+  if(document.body.classList.contains("light")){
+    localStorage.setItem("theme","light");
+    toggleBtn.textContent = "🌙 Mode Gelap";
+  }else{
+    localStorage.setItem("theme","dark");
+    toggleBtn.textContent = "☀️ Mode Terang";
+  }
+};
+</script>
+
+
+
+</body>
+</html>
 </body>
 </html>
